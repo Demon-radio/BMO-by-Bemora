@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>BMO Tetris Mini</title>
+<style>body{margin:0;background:#2d3436;color:#fff;display:flex;flex-direction:column;align-items:center;font-family:monospace}canvas{border:3px solid #fff}h1{margin:10px 0 5px}</style>
+</head><body>
+<h1>🧱 BMO Tetris Mini</h1><div id="score">Score: 0</div><canvas id="c" width="200" height="400"></canvas><p>Arrows = move, Up = rotate, Down = drop, R = restart</p>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d'),W=10,H=20,S=20;
+let board=Array(H).fill(0).map(()=>Array(W).fill(0)),score=0;
+const shapes=[[[1,1,1,1]],[[1,1],[1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[0,1,1],[1,1,0]],[[1,1,0],[0,1,1]],[[0,1,0],[1,1,1]]];
+const colors=['','#ff7675','#74b9ff','#55efc4','#ffeaa7','#a29bfe','#fd79a8','#fdcb6e'];
+let cur=rand(),cx=3,cy=0;
+function rand(){let s=shapes[Math.floor(Math.random()*shapes.length)];return {shape:s,color:1+Math.floor(Math.random()*6)}}
+function collides(s,x,y){for(let r=0;r<s.length;r++)for(let cc=0;cc<s[r].length;cc++)if(s[r][cc]){let nx=x+cc,ny=y+r;if(nx<0||nx>=W||ny>=H||(ny>=0&&board[ny][nx]))return true;}return false;}
+function merge(){cur.shape.forEach((row,r)=>row.forEach((v,cc)=>{if(v){board[cy+r][cx+cc]=cur.color;}}))}
+function clearLines(){let n=0;for(let y=H-1;y>=0;y--)if(board[y].every(v=>v)){board.splice(y,1);board.unshift(Array(W).fill(0));n++;y++;} if(n){score+=n*100;document.getElementById('score').textContent='Score: '+score;}}
+function draw(){ctx.fillStyle='#636e72';ctx.fillRect(0,0,c.width,c.height);for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(board[y][x]){ctx.fillStyle=colors[board[y][x]];ctx.fillRect(x*S,y*S,S-1,S-1);} cur.shape.forEach((row,r)=>row.forEach((v,cc)=>{if(v){ctx.fillStyle=colors[cur.color];ctx.fillRect((cx+cc)*S,(cy+r)*S,S-1,S-1);}}));}
+function tick(){if(collides(cur.shape,cx,cy+1)){merge();clearLines();cur=rand();cx=3;cy=0;if(collides(cur.shape,cx,cy)){board=Array(H).fill(0).map(()=>Array(W).fill(0));score=0;document.getElementById('score').textContent='Score: 0';}}else cy++;}
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowLeft'&&!collides(cur.shape,cx-1,cy))cx--;
+ if(e.key==='ArrowRight'&&!collides(cur.shape,cx+1,cy))cx++;
+ if(e.key==='ArrowDown')tick();
+ if(e.key==='ArrowUp'){let r=cur.shape[0].map((_,i)=>cur.shape.map(row=>row[i]).reverse());if(!collides(r,cx,cy))cur.shape=r;}
+ if(e.key==='r'||e.key==='R'){board=Array(H).fill(0).map(()=>Array(W).fill(0));score=0;}
+});
+setInterval(()=>{tick();draw();},350);draw();
+</script></body></html>

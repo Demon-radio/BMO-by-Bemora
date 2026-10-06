@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>BMO Snake - Mini Game</title>
+<style>body{margin:0;background:#a8d8ea;display:flex;flex-direction:column;align-items:center;font-family:monospace}canvas{border:4px solid #333;margin-top:10px}h1{margin:10px 0 0;color:#222}#score{font-size:20px}</style>
+</head><body>
+<h1>🐍 BMO Snake</h1><div id="score">Score: 0</div>
+<canvas id="c" width="320" height="320"></canvas><p>Arrows / WASD to move. Press R to restart.</p>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d'),S=16,N=20;
+let snake=[[10,10]],dir=[1,0],food=[5,5],score=0,alive=true;
+function placeFood(){food=[Math.floor(Math.random()*N),Math.floor(Math.random()*N)];}
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowUp'||e.key==='w')dir=[0,-1];
+ if(e.key==='ArrowDown'||e.key==='s')dir=[0,1];
+ if(e.key==='ArrowLeft'||e.key==='a')dir=[-1,0];
+ if(e.key==='ArrowRight'||e.key==='d')dir=[1,0];
+ if(e.key==='r'||e.key==='R'){snake=[[10,10]];dir=[1,0];score=0;alive=true;placeFood();}
+});
+function tick(){
+ if(!alive)return;
+ let head=[snake[0][0]+dir[0],snake[0][1]+dir[1]];
+ if(head[0]<0||head[0]>=N||head[1]<0||head[1]>=N||snake.some(s=>s[0]==head[0]&&s[1]==head[1])){alive=false;return;}
+ snake.unshift(head);
+ if(head[0]==food[0]&&head[1]==food[1]){score+=10;document.getElementById('score').textContent='Score: '+score;placeFood();}
+ else snake.pop();
+}
+function draw(){
+ ctx.fillStyle='#e8f8e8';ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillStyle='#ff6b6b';ctx.fillRect(food[0]*S,food[1]*S,S-1,S-1);
+ ctx.fillStyle='#333';snake.forEach(([x,y])=>ctx.fillRect(x*S,y*S,S-1,S-1));
+ if(!alive){ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#fff';ctx.font='24px monospace';ctx.fillText('GAME OVER - Press R',30,160);}
+}
+placeFood();setInterval(()=>{tick();draw();},120);
+</script></body></html>

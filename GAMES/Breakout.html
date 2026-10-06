@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>BMO Breakout</title>
+<style>body{margin:0;background:#0f0f23;color:#fff;display:flex;flex-direction:column;align-items:center;font-family:monospace}canvas{border:3px solid #4ecdc4;background:#1a1a2e}h1{margin:10px 0 5px;color:#4ecdc4}#score{font-size:18px;margin:5px}</style>
+</head><body>
+<h1>🧱 BMO Breakout</h1><div id="score">Score: 0 | Lives: 3</div>
+<canvas id="c" width="480" height="320"></canvas><p>← → to move | R to restart | BMO bounces the ball!</p>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let paddle={x:200,y:300,w:80,h:10,speed:7}, ball={x:240,y:150,dx:3,dy:-3,r:8}, bricks=[], score=0,lives=3,alive=true;
+const cols=8,rows=4,bw=50,bh=20,pad=10,offX=30,offY=30;
+function initBricks(){bricks=[];for(let r=0;r<rows;r++)for(let cc=0;cc<cols;cc++)bricks.push({x:offX+cc*(bw+pad),y:offY+r*(bh+pad),hp:1});}
+function reset(){paddle.x=200;ball.x=240;ball.y=150;ball.dx=3;ball.dy=-3;score=0;lives=3;alive=true;initBricks();updateHUD();}
+function updateHUD(){document.getElementById('score').textContent=`Score: ${score} | Lives: ${lives}`;}
+let keys={};
+document.addEventListener('keydown',e=>{keys[e.key]=true;if(e.key==='r'||e.key==='R')reset();});
+document.addEventListener('keyup',e=>keys[e.key]=false);
+function tick(){
+ if(!alive)return;
+ if(keys['ArrowLeft']&&paddle.x>0)paddle.x-=paddle.speed;
+ if(keys['ArrowRight']&&paddle.x+paddle.w<c.width)paddle.x+=paddle.speed;
+ ball.x+=ball.dx;ball.y+=ball.dy;
+ if(ball.x-ball.r<0||ball.x+ball.r>c.width)ball.dx*=-1;
+ if(ball.y-ball.r<0)ball.dy*=-1;
+ if(ball.y+ball.r>paddle.y&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w&&ball.dy>0){
+  ball.dy*=-1;
+  let hit=(ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);
+  ball.dx=hit*5;
+  // BMO bounce effect
+  ctx.fillStyle='rgba(78,205,196,0.3)';ctx.fillRect(0,0,c.width,c.height);
+ }
+ if(ball.y+ball.r>c.height){lives--;if(lives<=0){alive=false;}else{ball.x=240;ball.y=150;ball.dy=-3;ball.dx=3*(Math.random()>0.5?1:-1);}updateHUD();}
+ bricks.forEach(b=>{if(b.hp&&ball.x>b.x&&ball.x<b.x+bw&&ball.y>b.y&&ball.y<b.y+bh){b.hp=0;ball.dy*=-1;score+=10;updateHUD();}});
+ if(bricks.every(b=>!b.hp)){score+=100;initBricks();}
+}
+function draw(){
+ ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,c.width,c.height);
+ // bricks with BMO colors
+ bricks.forEach(b=>{if(b.hp){ctx.fillStyle=b.y<60?'#ff6b6b':b.y<90?'#4ecdc4':'#ffe66d';ctx.fillRect(b.x,b.y,bw,bh);ctx.strokeStyle='#0f0f23';ctx.strokeRect(b.x,b.y,bw,bh);}});
+ // paddle BMO style
+ ctx.fillStyle='#4ecdc4';ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+ ctx.fillStyle='#fff';ctx.fillRect(paddle.x+10,paddle.y+2,10,4);ctx.fillRect(paddle.x+60,paddle.y+2,10,4);
+ // ball
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#4ecdc4';ctx.beginPath();ctx.arc(ball.x,ball.y,3,0,Math.PI*2);ctx.fill();
+ if(!alive){ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#fff';ctx.font='24px monospace';ctx.fillText('GAME OVER - Press R',110,160);}
+}
+initBricks();setInterval(()=>{tick();draw();},16);
+</script></body></html>

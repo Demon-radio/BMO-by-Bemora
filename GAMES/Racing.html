@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>BMO Racing Mini</title>
+<style>body{margin:0;background:#1a1a2e;color:#fff;display:flex;flex-direction:column;align-items:center;font-family:monospace}canvas{border:3px solid #0f3460}h1{margin:10px 0 5px}#hud{display:flex;gap:30px;margin:5px 0}</style>
+</head><body>
+<h1>🏁 BMO Racing</h1><div id="hud"><span id="speed">Speed: 0</span><span id="dist">Distance: 0m</span></div>
+<canvas id="c" width="400" height="300"></canvas><p>Arrows: Left/Right = steer, Up = accelerate, Down = brake. R = restart</p>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d'),W=c.width,H=c.height;
+let bmo={x:W/2,y:H-40,angle:0,speed:0,maxSpeed:8,acc:0.15,dec:0.08,turn:0.06},road={seg:0,curve:0,segs:[],len:200},dist=0;
+function gen(){road.segs=[];for(let i=0;i<road.len;i++){road.segs.push({curve:(Math.random()-0.5)*0.8,straight:i%20>15});}}
+function reset(){bmo.x=W/2;bmo.y=H-40;bmo.angle=0;bmo.speed=0;road.seg=0;road.curve=0;dist=0;gen();}
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowUp')bmo.speed=Math.min(bmo.speed+bmo.acc,bmo.maxSpeed);
+ if(e.key==='ArrowDown')bmo.speed=Math.max(bmo.speed-bmo.dec*3,0);
+ if(e.key==='ArrowLeft')bmo.angle-=bmo.turn;
+ if(e.key==='ArrowRight')bmo.angle+=bmo.turn;
+ if(e.key==='r'||e.key==='R')reset();
+});
+function tick(){
+ if(bmo.speed>0){bmo.speed=Math.max(bmo.speed-bmo.dec,0);}
+ let seg=road.segs[road.seg%road.len]; road.curve+=seg.curve*0.03;
+ bmo.x+=Math.sin(bmo.angle)*bmo.speed*2;
+ bmo.angle+=road.curve*bmo.speed*0.02;
+ if(bmo.x<50)bmo.x=50; if(bmo.x>W-50)bmo.x=W-50;
+ road.seg+=bmo.speed*0.5; dist+=bmo.speed*2;
+ document.getElementById('speed').textContent='Speed: '+bmo.speed.toFixed(1);
+ document.getElementById('dist').textContent='Distance: '+Math.floor(dist)+'m';
+}
+function draw(){
+ ctx.fillStyle='#0f0f23'; ctx.fillRect(0,0,W,H);
+ // sky gradient
+ let g=ctx.createLinearGradient(0,0,0,H/2); g.addColorStop(0,'#1a1a2e'); g.addColorStop(1,'#0f3460'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H/2);
+ // road
+ ctx.fillStyle='#2d2d2d'; ctx.beginPath(); ctx.moveTo(50,H); ctx.lineTo(W-50,H); ctx.lineTo(W/2+100,H/2); ctx.lineTo(W/2-100,H/2); ctx.closePath(); ctx.fill();
+ // lanes
+ for(let i=0;i<10;i++){
+  let y=H-i*20-(road.seg*10)%200; let w=200-(y/H)*100;
+  ctx.strokeStyle='#ffd700'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(W/2-w/2,y); ctx.lineTo(W/2+w/2,y); ctx.stroke();
+ }
+ // BMO
+ ctx.save(); ctx.translate(bmo.x,bmo.y); ctx.rotate(bmo.angle);
+ ctx.fillStyle='#4ecdc4'; ctx.fillRect(-20,-10,40,20);
+ ctx.fillStyle='#fff'; ctx.fillRect(-15,-8,10,6); ctx.fillRect(5,-8,10,6);
+ ctx.restore();
+ // UI overlay
+ ctx.fillStyle='#fff'; ctx.font='14px monospace'; ctx.fillText('BMO',bmo.x-10,bmo.y-25);
+}
+reset(); setInterval(()=>{tick();draw();},30);
+</script></body></html>
