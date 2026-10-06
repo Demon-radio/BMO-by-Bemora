@@ -1,5 +1,9 @@
 # BMO by Bemora — Desktop Pet (Godot 4.3)
 
+> **Just want to run it?** Download the ready-to-play zip from
+> [Releases](https://github.com/Demon-radio/BMO-by-Bemora/releases/latest) →
+> unzip → double-click `BMO-by-Bemora.exe`. No Godot needed.
+
 Fan-made BMO desktop pet, presented/packaged by **Bemora**.
 
 - Transparent always-on-top buddy that walks, sleeps, laughs, follows your mouse.
