@@ -33,10 +33,17 @@ var songs: Array = [
 	# KEEPERS (old): "BMO why so pregnant" + cowboy/horse
 	"res://assets/Audio/song_egg.mp3",
 	"res://assets/Audio/song_horse.mp3",
+	# Come Along With Me (restored, biggest original ~1.25 MB)
+	"res://assets/Audio/song_comealong.mp3",
 	# MOST POPULAR BMO songs (drop your own licensed copies here):
 	# Bacon Pancakes + Oh BMO — see assets/Audio/README_SONGS.md
 	"res://assets/Audio/song_pop_bacon_pancakes.wav",
 	"res://assets/Audio/song_pop_oh_bmo.wav",
+	# 4 TALL LARGE songs (loud ~1.3 MB placeholders, replace with licensed audio)
+	"res://assets/Audio/song_big_01_fresh_potatoes.wav",
+	"res://assets/Audio/song_big_02_island_anthem.wav",
+	"res://assets/Audio/song_big_03_adventure_theme.wav",
+	"res://assets/Audio/song_big_04_bmo_party.wav",
 ]
 const WALK_SPEED: int = 200
 

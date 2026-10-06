@@ -7,15 +7,22 @@ Fan-made BMO desktop pet, presented/packaged by **Bemora**.
 - **Sing a Song = non-repeating jukebox**: shuffles all available songs, never repeats until every song has played once (shuffle-bag in `main.gd`: `song_queue` + `get_next_song()`).
 - **Songs are BIG/LOUD**: sing player runs at +6 dB (`SONG_VOLUME_DB`), placeholders generated near 0 dBFS.
 
-## Songs (4)
+## Songs (9 — all big/loud, never repeats)
 
-Kept:
+Kept / restored:
 - `assets/Audio/song_egg.mp3` — "BMO why so pregnant"
 - `assets/Audio/song_horse.mp3` — cowboy/horse
+- `assets/Audio/song_comealong.mp3` — "Come Along With Me" (~1.25 MB)
 
 Popular (placeholders — replace with your licensed copies, see `assets/Audio/README_SONGS.md`):
 - `assets/Audio/song_pop_bacon_pancakes.wav` — stands in for "Bacon Pancakes"
 - `assets/Audio/song_pop_oh_bmo.wav` — stands in for "Oh BMO"
+
+4 tall large songs (loud ~1.3 MB placeholders):
+- `assets/Audio/song_big_01_fresh_potatoes.wav`
+- `assets/Audio/song_big_02_island_anthem.wav`
+- `assets/Audio/song_big_03_adventure_theme.wav`
+- `assets/Audio/song_big_04_bmo_party.wav`
 
 Old/unused songs were removed (backup on the author's Desktop in `BMO-OLD-BACKUP/`).
 

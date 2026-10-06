@@ -1,16 +1,24 @@
 # SONGS — what is included and how to add the popular hits
 
-## Included right now (4 songs, all BIG/LOUD)
+## Included right now (9 songs, all BIG/LOUD)
 
-Keepers (your 2 old songs):
+Keepers (your old songs):
 - `song_egg.mp3` — "BMO why so pregnant" (kept, ~733 KB)
 - `song_horse.mp3` — cowboy / horse song (kept, ~887 KB)
+- `song_comealong.mp3` — "Come Along With Me" (restored, ~1.25 MB)
 
-Most-popular placeholders (loud, ~705 KB each, generated so the jukebox has 4 tracks):
+Most-popular placeholders (loud, ~705 KB each):
 - `song_pop_bacon_pancakes.wav` — PLACEHOLDER for "Bacon Pancakes"
 - `song_pop_oh_bmo.wav` — PLACEHOLDER for "Oh BMO"
 
+4 TALL LARGE songs (loud, ~1.3 MB / ~15 s each):
+- `song_big_01_fresh_potatoes.wav` — PLACEHOLDER (Fresh Potatoes slot)
+- `song_big_02_island_anthem.wav` — PLACEHOLDER (Island Anthem slot)
+- `song_big_03_adventure_theme.wav` — PLACEHOLDER (Adventure Theme slot)
+- `song_big_04_bmo_party.wav` — PLACEHOLDER (BMO Party slot)
+
 The Sing player runs at +6 dB (`SONG_VOLUME_DB` in `main.gd`) so all songs sound big.
+No-repeat shuffle: every song plays once before any repeats (`song_queue` in `main.gd`).
 
 ## How to use your real licensed copies
 
